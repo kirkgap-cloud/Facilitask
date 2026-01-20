@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Background Animation */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        :root {
+            --theme-font: "Montserrat", sans-serif;
+            --theme-accentColor: #e10028;
+            --theme-dark-content-text-color: #264653;
+            --theme-widget-primary-color: #00375a;
+        }
+
+        body {
+            font-family: var(--theme-font), Arial, sans-serif;
+            background: linear-gradient(270deg, #010d56, #0036fa, #0275bd, #a2bdfc);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            transition: background 1s ease;
+            background-position: center center;
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        /* --- Header & Navigation --- */
+        .main-header {
+            width: 100%;
+            padding: 1px 15px;
+            background: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { height: 50px; }
+
+        .nav-buttons-container {
+            display: flex;
+            margin-left: auto;
+        }
+
+        .header-button {
+            background: none;
+            border: 2px solid white;
+            color: white;
+            padding: 6px 10px;
+            margin: 0 8px;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transform: skewX(-20deg);
+            border-radius: 5px;
+            transition: color 0.4s ease-in-out;
+        }
+
+        .header-button:before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 150%; height: 100%;
+            background: white;
+            z-index: -1;
+            transform: translateX(-120%) skewX(-20deg);
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .header-button:hover { color: black; }
+        .header-button:hover:before { transform: translateX(0%) skewX(-20deg); }
+        .header-button span { display: block; transform: skewX(20deg); }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .statistics-container {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 800px;
+            width: 90%;
+            text-align: left;
+            position: relative;
+            transition: opacity 0.3s;
+        }
+
+        .stat {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 20px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            font-weight: bold;
+            transition: width 0.5s ease;
+        }
+
+        .stat-toggle-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+
+        .stat-toggle-button:hover { background: rgba(255, 255, 255, 0.2); }
+
+        #unhide-button {
+            position: absolute;
+            top: 70px; left: 20px;
+            z-index: 99;
+            display: none;
+        }
+
+        #hide-button { position: absolute; top: 15px; right: 15px; }
+
+        /* --- Footer & Modal --- */
+        .privacy-footer {
+            width: 100%;
+            padding: 10px 0;
+            background: black;
+            text-align: center;
+            font-size: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .privacy-footer a, .privacy-footer button {
+            color: #a2bdfc;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .personalization-notice-link {
+            color: #551A8B !important;
+            text-decoration: underline;
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            color: black;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 90%;
+            width: 500px;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .reset-button {
+            background: #ff5555;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+        }
+
+        .close-button {
+            padding: 10px 20px; 
+            background: #333; 
+            color: white; 
+            border-radius: 5px; 
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="unhide-button" class="stat-toggle-button" onclick="toggleStatistics(true)">Show Statistics</button>
+
+    <header class="main-header">
+        <a href="homepage.html">
+            <img src="Facilitask Logo 4.png" alt="Facilitask Logo" class="logo">
+        </a>
+        <nav class="nav-buttons-container">
+            <a href="System pang reserba.html" class="header-button"><span>Work List</span></a>
+            <a href="Profile.html" class="header-button"><span>Profile</span></a>
+            <a href="History.html" class="header-button"><span>History</span></a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div id="statisticsContainer" class="statistics-container">
+            <button id="hide-button" class="stat-toggle-button" onclick="toggleStatistics(false)">Hide Statistics</button>
+            <h1>Task Statistics</h1>
+            <div id="statistics"></div>
+        </div>
+    </main>
+
+    <footer class="privacy-footer">
+        <p>
+            &copy; 2025 Facilitask. All rights reserved. |
+            <button onclick="openModal()">Customize Background</button>
+            | <a href="policy.html">Privacy Policy</a>
+        </p>
+    </footer>
+
+    <div id="backgroundModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Background Customization</h3>
+            <p>Choose a dynamic color gradient or a custom image.</p>
+
+            <div class="control-group">
+                <label>Gradient Start Color:</label>
+                <input type="color" id="color1" value="#010d56" oninput="updateGradient()">
+                <label>Gradient End Color:</label>
+                <input type="color" id="color2" value="#a2bdfc" oninput="updateGradient()">
+                <button onclick="updateGradient()" style="margin-top: 10px; padding: 10px 15px; background: #0036fa; color: white; border-radius: 5px;">Apply Gradient</button>
+            </div>
+
+            <div class="control-group">
+                <label>Select Custom Background Image:</label>
+                <input type="file" id="imageFile" accept="image/*">
+                <button onclick="applyImageBackground()" style="margin-top: 10px; padding: 10px 15px; background: #0036fa; color: white; border-radius: 5px;">Apply Image</button>
+            </div>
+            
+            <div style="overflow: hidden; margin-top: 20px;">
+                <button class="reset-button" onclick="resetBackground()">Reset to Default</button>
+                <button onclick="closeModal()" class="close-button">Close</button>
+                <a href="Personalization.html" class="personalization-notice-link">Personalization Privacy Notice</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const statisticsContainer = document.getElementById('statisticsContainer');
+        const unhideButton = document.getElementById('unhide-button');
+        const body = document.body;
+        const modal = document.getElementById('backgroundModal');
+        const color1Input = document.getElementById('color1');
+        const color2Input = document.getElementById('color2');
+        const imageFileInput = document.getElementById('imageFile');
+        const defaultGradient = `linear-gradient(270deg, #010d56, #a2bdfc, #010d56, #a2bdfc)`;
+
+        function toggleStatistics(show) {
+            statisticsContainer.style.display = show ? 'block' : 'none';
+            unhideButton.style.display = show ? 'none' : 'block';
+            localStorage.setItem('statsHidden', !show);
+        }
+
+        // --- UPDATED STATISTICS LOGIC ---
+        function loadStatistics() {
+            // Get data from the new storage format
+            const tasks = JSON.parse(localStorage.getItem('facilitask_data') || '[]');
+            const history = JSON.parse(localStorage.getItem('facilitask_history') || '[]');
+            const statisticsDiv = document.getElementById("statistics");
+
+            // Calculate stats from current tasks
+            const totalTasks = tasks.length;
+            const completedTasks = tasks.filter(t => t.isDone).length;
+            
+            // Calculate total historical tasks
+            let totalHistoricalTasks = 0;
+            let totalHistoricalCompleted = 0;
+            history.forEach(entry => {
+                totalHistoricalTasks += entry.totalTasks || 0;
+                totalHistoricalCompleted += entry.completedTasks || 0;
+            });
+
+            // Combined totals
+            const grandTotalTasks = totalTasks + totalHistoricalTasks;
+            const grandTotalCompleted = completedTasks + totalHistoricalCompleted;
+            
+            let proficiency = grandTotalTasks > 0 ? ((grandTotalCompleted / grandTotalTasks) * 100).toFixed(2) : 0;
+            const progressWidth = Math.min(parseFloat(proficiency), 100);
+
+            statisticsDiv.innerHTML = `
+                <div class="stat">Current Active Tasks: ${totalTasks}</div>
+                <div class="stat">Current Completed Tasks: ${completedTasks}</div>
+                <div class="stat">Historical Archived Tasks: ${totalHistoricalTasks}</div>
+                <div class="stat">Total Tasks Ever Created: ${grandTotalTasks}</div>
+                <div class="stat">Total Tasks Completed: ${grandTotalCompleted}</div>
+                <div class="stat">
+                    Overall Proficiency: ${proficiency}%
+                    <div class="progress-bar">
+                        <div class="progress" style="width: ${progressWidth}%">${proficiency}%</div>
+                    </div>
+                </div>
+            `;
+
+            const isHidden = localStorage.getItem('statsHidden') === 'true';
+            toggleStatistics(!isHidden);
+        }
+
+        // --- BACKGROUND LOGIC ---
+        function toggleGradientAnimation(enable) {
+            if (enable) {
+                body.style.animation = 'gradientAnimation 10s ease infinite';
+                body.style.backgroundSize = '400% 400%';
+            } else {
+                body.style.animation = 'none';
+                body.style.backgroundSize = 'cover';
+            }
+        }
+
+        function updateGradient() {
+            const c1 = color1Input.value;
+            const c2 = color2Input.value;
+            body.style.backgroundImage = `linear-gradient(270deg, ${c1}, ${c2}, ${c1}, ${c2})`;
+            toggleGradientAnimation(true);
+
+            localStorage.setItem('bgType', 'gradient');
+            localStorage.setItem('gradColor1', c1);
+            localStorage.setItem('gradColor2', c2);
+            localStorage.removeItem('bgImage');
+        }
+
+        function applyImageBackground() {
+            const file = imageFileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    body.style.backgroundImage = `url('${e.target.result}')`;
+                    toggleGradientAnimation(false);
+                    localStorage.setItem('bgType', 'image');
+                    localStorage.setItem('bgImage', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetBackground() {
+            color1Input.value = '#010d56';
+            color2Input.value = '#a2bdfc';
+            body.style.backgroundImage = defaultGradient;
+            toggleGradientAnimation(true);
+            
+            localStorage.removeItem('bgType');
+            localStorage.removeItem('gradColor1');
+            localStorage.removeItem('gradColor2');
+            localStorage.removeItem('bgImage');
+        }
+
+        function loadSettings() {
+            const bgType = localStorage.getItem('bgType');
+            if (bgType === 'image') {
+                body.style.backgroundImage = `url('${localStorage.getItem('bgImage')}')`;
+                toggleGradientAnimation(false);
+            } else if (bgType === 'gradient') {
+                const c1 = localStorage.getItem('gradColor1') || '#010d56';
+                const c2 = localStorage.getItem('gradColor2') || '#a2bdfc';
+                color1Input.value = c1;
+                color2Input.value = c2;
+                body.style.backgroundImage = `linear-gradient(270deg, ${c1}, ${c2}, ${c1}, ${c2})`;
+                toggleGradientAnimation(true);
+            } else {
+                toggleGradientAnimation(true); 
+            }
+        }
+
+        function openModal() { modal.style.display = 'flex'; }
+        function closeModal() { modal.style.display = 'none'; }
+
+        window.onload = function () {
+            loadSettings();
+            loadStatistics();
+        };
+    </script>
+</body>
+</html>

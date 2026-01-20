@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Policy</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+
+        :root {
+            --theme-font: "Montserrat", sans-serif;
+            --primary-blue: #016af3;
+            --dark-blue: #001989;
+        }
+
+        body {
+            /* FIX: Use the Montserrat variable for the main document font */
+            font-family: var(--theme-font), Arial, sans-serif;
+            
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Apply font to container as well, and adjust width for readability */
+        .container {
+            font-family: var(--theme-font), Arial, sans-serif;
+            max-width: 650px; /* Slightly narrower for better reading flow */
+            width: 90%;
+            padding: 40px 30px; /* Increased vertical padding */
+            background: white;
+            border-radius: 12px; /* Slightly rounder corners */
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+            color: #333; /* Darker text */
+        }
+        
+        .container h2 {
+            color: var(--dark-blue); /* Use the dark blue theme color */
+            font-size: 2rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .policy-text {
+            text-align: left;
+            margin: 20px 0 30px;
+            font-size: 1rem;
+            line-height: 1.6; /* Improved line spacing */
+        }
+
+        .policy-text ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .policy-text li {
+            margin-bottom: 8px;
+        }
+
+        .accept-container {
+            margin-top: 20px;
+        }
+
+        /* Styling for both the button and the "Back" link */
+        .accept-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 50px; /* Pill shape */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none; /* For the anchor link */
+            display: inline-block;
+            font-weight: 700;
+            margin: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .accept-btn:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>System Policy</h2>
+        <div class="policy-text">
+            <p><strong>Goal of the System:</strong> This system is designed to help students manage their tasks efficiently, track their progress, and store completed work for future reference.</p>
+            <p><strong>What to Do:</strong></p>
+            <ul>
+                <li>Use the Work List to add, update, and complete tasks.</li>
+                <li>Upload proof of task completion before marking it as done.</li>
+                <li>View past completed tasks in the History section.</li>
+            </ul>
+            <p><strong>Acceptance:</strong> By clicking "Accept Policy," you agree to follow the guidelines outlined above and use the system responsibly.</p>
+        </div>
+        <div class="accept-container">
+            <button class="accept-btn" onclick="acceptPolicy()">Accept Policy</button>
+        </div>
+        <br>
+        <a href="mainpage.html" class="accept-btn">Back to Main Page</a>
+    </div>
+
+    <script>
+        function acceptPolicy() {
+            // Check if policy is already accepted to prevent multiple alerts/changes
+            if (localStorage.getItem("policyAccepted") !== "true") {
+                localStorage.setItem("policyAccepted", "true");
+                alert("You have accepted the policy. You will be redirected to the main page.");
+                
+                // Optional: Redirect the user after acceptance
+                window.location.href = "mainpage.html"; 
+            } else {
+                alert("Policy already accepted.");
+                window.location.href = "mainpage.html";
+            }
+        }
+        
+        // Optional: Check on load to disable the button if already accepted
+        window.onload = function() {
+            const isAccepted = localStorage.getItem("policyAccepted") === "true";
+            const acceptButton = document.querySelector('.accept-btn');
+            const acceptContainer = document.querySelector('.accept-container');
+
+            if (isAccepted && acceptButton) {
+                acceptContainer.innerHTML = '<p style="color: green; font-weight: 700;">Policy Already Accepted ✅</p>';
+            }
+        };
+    </script>
+</body>
+</html>

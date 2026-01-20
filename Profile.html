@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        :root {
+            --theme-font: "Montserrat", sans-serif;
+            --theme-accentColor: #e10028;
+            --theme-widget-primary-color: #00375a;
+        }
+
+        body {
+            font-family: var(--theme-font), Arial, sans-serif;
+            background: linear-gradient(270deg, #010d56, #0036fa, #0275bd, #a2bdfc);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .main-header {
+            width: 100%;
+            padding: 5px 20px;
+            background: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .logo { height: 45px; }
+
+        .header-button {
+            background: none;
+            border: 2px solid white;
+            color: white;
+            padding: 8px 15px;
+            margin: 0 8px;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transform: skewX(-20deg);
+            border-radius: 5px;
+            transition: color 0.4s ease-in-out;
+            display: inline-block;
+        }
+
+        .header-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%;
+            height: 100%;
+            background: white;
+            z-index: -1;
+            transform: translateX(-120%) skewX(-20deg);
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .header-button:hover { color: black; }
+        .header-button:hover:before { transform: translateX(0%) skewX(-20deg); }
+        .header-button span { display: block; transform: skewX(20deg); }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .profile-container {
+            width: 100%;
+            max-width: 650px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            padding: 35px;
+            animation: fadeIn 0.6s ease-out;
+            color: black;
+        }
+
+        .profile-title {
+            text-align: center;
+            color: var(--theme-widget-primary-color);
+            margin: 0 0 25px 0;
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-pic-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        #profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--theme-widget-primary-color);
+            object-fit: cover;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+            background-size: 70%;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        #profile-pic:hover {
+            transform: scale(1.05);
+            border-color: #0036fa;
+        }
+
+        .upload-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: var(--theme-widget-primary-color);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid white;
+            transition: background 0.3s;
+        }
+
+        .upload-badge:hover {
+            background: #0036fa;
+        }
+
+        .profile-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .profile-field {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-field label {
+            font-weight: 700;
+            color: #555;
+            min-width: 90px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .profile-field i {
+            color: var(--theme-widget-primary-color);
+            width: 16px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--theme-widget-primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 55, 90, 0.1);
+        }
+
+        .password-container {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .password-container input {
+            flex: 1;
+        }
+
+        .peek-btn {
+            padding: 0 14px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 45px;
+        }
+
+        .peek-btn:active {
+            background: #ddd;
+        }
+
+        .peek-btn:hover {
+            background: #e5e5e5;
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .profile-details .profile-field {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .profile-details .profile-field label {
+            min-width: auto;
+        }
+
+        .profile-details .profile-field input {
+            width: 100%;
+        }
+
+        .tagline-field {
+            grid-column: 1 / -1;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button.main-btn {
+            flex: 1;
+            padding: 14px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            font-family: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button.main-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        button.main-btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #0036fa, #0275bd);
+        }
+
+        .btn-back {
+            background: #6c757d;
+        }
+
+        .btn-logout {
+            background: var(--theme-accentColor);
+        }
+
+        .message {
+            text-align: center;
+            padding: 12px;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            color: #155724;
+            font-weight: bold;
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-details {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <a href="mainpage.html">
+            <img src="Facilitask Logo 4.png" alt="Logo" class="logo">
+        </a>
+        <nav class="nav-buttons-container">
+            <a href="mainpage.html" class="header-button"><span>Main Page</span></a>
+            <a href="System pang reserba.html" class="header-button"><span>Work List</span></a>
+            <a href="History.html" class="header-button"><span>History</span></a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="profile-container">
+            <h1 class="profile-title">My Profile</h1>
+
+            <div class="profile-header">
+                <div class="profile-pic-wrapper">
+                    <img id="profile-pic" alt="Profile Picture">
+                    <label for="profile-input" class="upload-badge">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="profile-input" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-field">
+                        <label><i class="fas fa-user"></i> Name:</label>
+                        <input type="text" id="name" placeholder="Enter your name">
+                    </div>
+                    <div class="profile-field">
+                        <label><i class="fas fa-lock"></i> Password:</label>
+                        <div class="password-container">
+                            <input type="password" id="password" placeholder="Enter password">
+                            <button type="button" class="peek-btn" id="peek-btn">👁️</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="profile-field">
+                    <label><i class="fas fa-birthday-cake"></i> Birthday:</label>
+                    <input type="date" id="birthday">
+                </div>
+                <div class="profile-field">
+                    <label><i class="fas fa-hashtag"></i> Age:</label>
+                    <input type="number" id="age" placeholder="Your age" min="1" max="120">
+                </div>
+                <div class="profile-field tagline-field">
+                    <label><i class="fas fa-quote-left"></i> Tagline:</label>
+                    <input type="text" id="tagline" placeholder="Your personal tagline or motto">
+                </div>
+            </div>
+
+            <p class="message" id="save-message">Profile Updated Successfully!</p>
+
+            <div class="btn-group">
+                <button class="main-btn btn-save" id="save-btn">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button class="main-btn btn-back" id="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="main-btn btn-logout" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 1. LOAD BACKGROUND SETTINGS
+        function loadSettings() {
+            const bgType = localStorage.getItem('bgType');
+            const body = document.body;
+            
+            if (bgType === 'image') {
+                body.style.backgroundImage = `url('${localStorage.getItem('bgImage')}')`;
+                body.style.animation = 'none';
+                body.style.backgroundSize = 'cover';
+            } else if (bgType === 'gradient') {
+                const c1 = localStorage.getItem('gradColor1') || '#010d56';
+                const c2 = localStorage.getItem('gradColor2') || '#a2bdfc';
+                body.style.backgroundImage = `linear-gradient(270deg, ${c1}, ${c2}, ${c1}, ${c2})`;
+                body.style.animation = 'gradientAnimation 10s ease infinite';
+                body.style.backgroundSize = '400% 400%';
+            }
+        }
+
+        // 2. SETUP PAGE ON LOAD
+        document.addEventListener("DOMContentLoaded", function () {
+            loadSettings();
+            
+            const user = localStorage.getItem("loggedInUser");
+
+            if (!user) {
+                window.location.href = "login.html";
+            } else {
+                fetchUserData(user);
+            }
+
+            // --- PASSWORD PEEK LOGIC ---
+            const passBox = document.getElementById("password");
+            const btn = document.getElementById("peek-btn");
+
+            const show = () => {
+                passBox.type = "text";
+                btn.textContent = "🙈";
+            };
+            const hide = () => {
+                passBox.type = "password";
+                btn.textContent = "👁️";
+            };
+
+            btn.addEventListener("mousedown", show);
+            btn.addEventListener("mouseup", hide);
+            btn.addEventListener("mouseleave", hide);
+            
+            // Touch support for mobile
+            btn.addEventListener("touchstart", (e) => {
+                e.preventDefault();
+                show();
+            });
+            btn.addEventListener("touchend", (e) => {
+                e.preventDefault();
+                hide();
+            });
+
+            // Auto-calculate age from birthday
+            document.getElementById("birthday").addEventListener("change", function() {
+                const birthday = new Date(this.value);
+                const today = new Date();
+                let age = today.getFullYear() - birthday.getFullYear();
+                const monthDiff = today.getMonth() - birthday.getMonth();
+                
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthday.getDate())) {
+                    age--;
+                }
+                
+                if (age > 0 && age < 150) {
+                    document.getElementById("age").value = age;
+                }
+            });
+        });
+
+        // 3. FETCH USER DATA
+        function fetchUserData(username) {
+            const savedData = JSON.parse(localStorage.getItem("userData_" + username)) || {};
+            
+            // Search for password in all possible storage locations
+            let foundPassword = "";
+
+            if (savedData.password) {
+                foundPassword = savedData.password;
+            } else {
+                const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+                const match = allUsers.find(u => u.username === username);
+                if (match) foundPassword = match.password;
+            }
+
+            // Populate form fields
+            document.getElementById("name").value = savedData.name || username;
+            document.getElementById("birthday").value = savedData.birthday || "";
+            document.getElementById("age").value = savedData.age || "";
+            document.getElementById("tagline").value = savedData.tagline || "";
+            document.getElementById("password").value = foundPassword;
+
+            if (savedData.profilePic && savedData.profilePic.startsWith('data:image')) {
+                document.getElementById("profile-pic").src = savedData.profilePic;
+            }
+        }
+
+        // 4. SAVE PROFILE
+        document.getElementById("save-btn").addEventListener("click", function() {
+            const user = localStorage.getItem("loggedInUser");
+            const name = document.getElementById("name").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const birthday = document.getElementById("birthday").value;
+            const age = document.getElementById("age").value;
+            const tagline = document.getElementById("tagline").value.trim();
+            const profilePic = document.getElementById("profile-pic").src;
+
+            // Validation
+            if (!name) {
+                showMessage("Please enter your name", true);
+                return;
+            }
+
+            if (!password) {
+                showMessage("Please enter a password", true);
+                return;
+            }
+
+            const data = {
+                name: name,
+                password: password,
+                birthday: birthday,
+                age: age,
+                tagline: tagline,
+                profilePic: profilePic
+            };
+
+            // Save to user-specific storage
+            localStorage.setItem("userData_" + user, JSON.stringify(data));
+
+            // Also update in users array if it exists
+            const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+            const userIndex = allUsers.findIndex(u => u.username === user);
+            if (userIndex !== -1) {
+                allUsers[userIndex].password = password;
+                localStorage.setItem("users", JSON.stringify(allUsers));
+            }
+
+            showMessage("Profile Updated Successfully!", false);
+            setTimeout(() => {
+                window.location.href = "mainpage.html";
+            }, 1500);
+        });
+
+        // 5. SHOW MESSAGE
+        function showMessage(text, isError) {
+            const msg = document.getElementById("save-message");
+            msg.textContent = text;
+            msg.className = "message" + (isError ? " error-message" : "");
+            msg.style.display = "block";
+            
+            if (!isError) {
+                setTimeout(() => {
+                    msg.style.display = "none";
+                }, 3000);
+            }
+        }
+
+        // 6. IMAGE UPLOAD
+        document.getElementById("profile-input").addEventListener("change", function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showMessage("Image too large. Maximum size is 5MB", true);
+                    return;
+                }
+
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    showMessage("Please select a valid image file", true);
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById("profile-pic").src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 7. NAVIGATION BUTTONS
+        document.getElementById("logout-btn").onclick = () => {
+            if (confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            }
+        };
+
+        document.getElementById("back-btn").onclick = () => {
+            window.location.href = "mainpage.html";
+        };
+    </script>
+</body>
+</html>

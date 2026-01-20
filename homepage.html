@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Facilitask!</title>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Montserrat from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --theme-font: "Montserrat", sans-serif;
+            --theme-accentColor: #e10028;
+            --theme-dark-content-text-color: #264653;
+            --theme-widget-primary-color: #00375a;
+        }
+
+        @font-face {
+            font-family: 'Monsterrat';
+            src: url(Montserrat-SemiBold.ttf) format('truetype');
+        }
+
+        body {
+            font-family: "Montserrat", sans-serif;
+            background: url('bg 3.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: rgb(0, 0, 0);
+            margin: 0;
+            padding: 0;
+            animation: fadeIn 1.5s ease-in-out;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding-left: 0px;
+        }
+
+        .logo {
+            width: 180px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            transform: translateY(-15px);
+            animation: slideIn 1s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        p {
+            font-size: 1.75rem;
+            line-height: 2rem;
+            margin-bottom: 15px;
+            transform: translateY(-15px);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* --- Button Styles --- */
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #a17df7, #6366F1);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.125rem;
+            font-weight: bold;
+            font-family: var(--theme-font);
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 5px 12px rgba(255, 255, 255, 0.6);
+            transform: skew(-20deg);
+            padding: 14px 30px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        /* Un-skew the text inside */
+        .btn span {
+            display: inline-block;
+            transform: skew(20deg);
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #7C3AED, #4F46E5);
+            transform: scale(1.05) skew(-20deg);
+            box-shadow: 0px 7px 14px rgba(107, 107, 107, 0.7);
+        }
+
+        /* --- Modal Styles --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            text-align: left;
+            max-width: 420px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .modal h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-top: 0;
+        }
+
+        .modal span {
+            font-size: 0.70rem;
+        }
+
+        .modal p {
+            font-size: large;
+            line-height: 1.0rem;
+        }
+
+        .modal .close {
+            background: red;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.125rem;
+            border-radius: 6px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            transition: opacity 0.3s;
+        }
+
+        #acceptBtn {
+            padding: 4px 9px !important;
+            font-size: 1.5rem;
+            margin-top: 15px;
+        }
+
+        #acceptBtn:hover {
+            background: linear-gradient(45deg, #000000, #575757);
+            transform: scale(1.05) skew(-20deg);
+            box-shadow: 0px 7px 14px rgba(107, 107, 107, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="Facilitask Logo.png" alt="Facilitask Logo" class="logo">
+        <h1>Welcome to <br> Facilitask</h1>
+        <p>Experience an innovative way to <br> manage your tasks efficiently.</p>
+    </div>
+
+    <div class="buttons">
+        <button class="btn" onclick="showModal('policy')"><span>Policy</span></button>
+        <button class="btn" onclick="showModal('terms')"><span>Terms of Use</span></button>
+        <button class="btn" onclick="showModal('goals')"><span>System Goals</span></button>
+        <button class="btn" onclick="window.location.href='login.html'"><span>Login</span></button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeModal()"></div>
+
+    <div class="modal" id="policy">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h2>System Policy</h2>
+        <p><strong>Goal of the System:</strong> This system is designed to help students manage their tasks efficiently,
+            track their progress, and store completed work for future reference.</p>
+        <button class="btn" onclick="acceptPolicy()"><span>Accept Policy</span></button>
+    </div>
+
+    <div class="modal" id="terms">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h2>Terms of Use</h2>
+        <p>By using this system, you agree to adhere to ethical guidelines and ensure that your tasks and activities
+            align with academic integrity.</p>
+    </div>
+
+    <div class="modal" id="goals">
+        <button class="close" onclick="closeModal()">&times;</button>
+        <h2>System Goals</h2>
+        <p>Our system aims to help users increase efficiency, manage tasks systematically, and maintain a structured
+            workflow.</p>
+    </div>
+
+    <script>
+        function showModal(id) {
+            document.getElementById(id).style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function acceptPolicy() {
+            localStorage.setItem("policyAccepted", "true");
+            alert("You have accepted the policy.");
+        }
+    </script>
+</body>
+
+</html>

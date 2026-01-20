@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalization Privacy Notice</title> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Define the custom font variable */
+        :root {
+            --theme-font: "Montserrat", sans-serif;
+        }
+        
+        /* Using the correct tag selector for the body */
+        body { 
+            font-family: var(--theme-font), Arial, sans-serif;
+            text-align: center;
+            /* Using a cleaner, more vibrant gradient */
+            background: linear-gradient(135deg, #016af3, #001989);
+            color: black; /* Default text color in case container fails */
+            padding: 20px;
+            min-height: 100vh; /* Ensure it takes full viewport height */
+            margin: 0;
+            display: flex; /* Helps center the container vertically */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            /* FIX: Adjusted max-width for better reading flow */
+            max-width: 600px; 
+            width: 90%; /* Ensure it's responsive on small screens */
+            /* Removed margin-top/bottom to use flexbox centering on body */
+            padding: 40px 30px; /* Slightly more vertical padding */
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+            color: #333; /* Darker text for better contrast */
+            /* Ensure the content box is slightly separated from the edges */
+        }
+        
+        .container h1 {
+            color: #001989; /* A deep blue color for the heading */
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .container p {
+            line-height: 1.6; /* Increased line height for readability */
+            font-size: 1rem;
+            margin-bottom: 25px; /* Add space below the paragraph */
+        }
+
+        .go-back-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            background: linear-gradient(to right, #046bca, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 50px; /* Rounder button */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none; /* Remove underline from anchor */
+            display: inline-block;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(4, 107, 202, 0.5);
+        }
+        
+        .go-back-btn:hover {
+            background: linear-gradient(to right, #2575fc, #046bca);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(4, 107, 202, 0.6);
+        }
+    
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1> <b>Personalization Privacy Notice</b></h1>
+        
+        <p>While being able to personalize your background is an entertaining feature, it is strictly prohibited to upload images containing <b>harmful and sensitive information</b>. By using this feature, you agree that any content found to violate this policy will be immediately removed, and this platform will not be responsible for any legal issues arising from the content uploaded by users.</p>
+        
+        <a href="mainpage.html" class="go-back-btn"> Go Back</a>
+
+    </div>
+</body>
+</html>

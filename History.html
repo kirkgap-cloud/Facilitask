@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        :root {
+            --theme-font: "Montserrat", sans-serif;
+            --theme-accentColor: #e10028;
+            --theme-widget-primary-color: #00375a;
+        }
+
+        body {
+            font-family: var(--theme-font), Arial, sans-serif;
+            background: linear-gradient(270deg, #010d56, #0036fa, #0275bd, #a2bdfc);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .main-header {
+            width: 100%;
+            padding: 5px 20px;
+            background: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .logo { height: 45px; }
+
+        .header-button {
+            background: none;
+            border: 2px solid white;
+            color: white;
+            padding: 8px 15px;
+            margin: 0 8px;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transform: skewX(-20deg);
+            border-radius: 5px;
+            transition: color 0.4s ease-in-out;
+            display: inline-block;
+        }
+
+        .header-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%;
+            height: 100%;
+            background: white;
+            z-index: -1;
+            transform: translateX(-120%) skewX(-20deg);
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .header-button:hover { color: black; }
+        .header-button:hover:before { transform: translateX(0%) skewX(-20deg); }
+        .header-button span { display: block; transform: skewX(20deg); }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.4);
+            color: black;
+            width: 90%;
+            flex-grow: 1;
+        }
+
+        h2 {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #333;
+            margin-top: 0;
+        }
+
+        .stats-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .history-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 6px solid var(--theme-widget-primary-color);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .history-date {
+            font-weight: bold;
+            color: #00375a;
+            font-size: 1.1em;
+        }
+
+        .history-meta {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .task {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #0275bd;
+        }
+
+        .task.done {
+            background: #d4edda;
+            border-left-color: #28a745;
+            opacity: 0.9;
+        }
+
+        .task-header {
+            font-weight: 700;
+            color: #00375a;
+            margin-bottom: 5px;
+        }
+
+        .task-meta {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .btn-remove {
+            background: #e10028;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: #c00020;
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 4000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from { bottom: 0; opacity: 0; }
+            to { bottom: 30px; opacity: 1; }
+        }
+
+        @keyframes fadeout {
+            from { bottom: 30px; opacity: 1; }
+            to { bottom: 0; opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <a href="mainpage.html">
+            <img src="Facilitask Logo 4.png" alt="Logo" class="logo">
+        </a>
+        <nav class="nav-buttons-container">
+            <a href="mainpage.html" class="header-button"><span>Main Page</span></a>
+            <a href="System pang reserba.html" class="header-button"><span>Work List</span></a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Task History <span class="stats-badge" id="stats-display">0 Entries</span></h2>
+        <div id="history-container"></div>
+    </div>
+
+    <div id="toast">Message</div>
+
+    <script>
+        function loadSettings() {
+            const bgType = localStorage.getItem('bgType');
+            const body = document.body;
+            
+            if (bgType === 'image') {
+                body.style.backgroundImage = `url('${localStorage.getItem('bgImage')}')`;
+                body.style.animation = 'none';
+                body.style.backgroundSize = 'cover';
+            } else if (bgType === 'gradient') {
+                const c1 = localStorage.getItem('gradColor1') || '#010d56';
+                const c2 = localStorage.getItem('gradColor2') || '#a2bdfc';
+                body.style.backgroundImage = `linear-gradient(270deg, ${c1}, ${c2}, ${c1}, ${c2})`;
+                body.style.animation = 'gradientAnimation 10s ease infinite';
+                body.style.backgroundSize = '400% 400%';
+            }
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById("toast");
+            t.innerText = msg;
+            t.className = "show";
+            setTimeout(() => { t.className = ""; }, 3000);
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('facilitask_history') || '[]');
+            const container = document.getElementById('history-container');
+            const statsDisplay = document.getElementById('stats-display');
+            
+            statsDisplay.innerText = `${history.length} ${history.length === 1 ? 'Entry' : 'Entries'}`;
+
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-history"></i>
+                        <h3>No History Yet</h3>
+                        <p>Tasks saved from the Work List will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            
+            history.forEach((entry, entryIndex) => {
+                const section = document.createElement('div');
+                section.className = 'history-section';
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'history-header';
+                
+                const dateInfo = document.createElement('div');
+                dateInfo.innerHTML = `
+                    <div class="history-date">
+                        <i class="fas fa-calendar-alt"></i> ${entry.date} at ${entry.time}
+                    </div>
+                    <div class="history-meta">
+                        ${entry.totalTasks} tasks (${entry.completedTasks} completed)
+                    </div>
+                `;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'btn-remove';
+                removeBtn.innerHTML = '<i class="fas fa-trash"></i> Remove Entry';
+                removeBtn.onclick = () => removeHistoryEntry(entryIndex);
+                
+                headerDiv.appendChild(dateInfo);
+                headerDiv.appendChild(removeBtn);
+                section.appendChild(headerDiv);
+                
+                if (entry.tasks && entry.tasks.length > 0) {
+                    const taskGrid = document.createElement('div');
+                    taskGrid.className = 'task-grid';
+                    
+                    entry.tasks.forEach(task => {
+                        const taskDiv = document.createElement('div');
+                        taskDiv.className = 'task' + (task.isDone ? ' done' : '');
+                        
+                        taskDiv.innerHTML = `
+                            <div class="task-header">
+                                ${task.isDone ? '<i class="fas fa-check-circle"></i> ' : ''}
+                                ${task.name}
+                            </div>
+                            <div class="task-meta">
+                                <i class="fas fa-tasks"></i> ${task.type} | Due: ${task.date} ${task.time}
+                            </div>
+                        `;
+                        
+                        taskGrid.appendChild(taskDiv);
+                    });
+                    
+                    section.appendChild(taskGrid);
+                }
+                
+                container.appendChild(section);
+            });
+        }
+
+        function removeHistoryEntry(index) {
+            if (!confirm('Remove this history entry?')) return;
+            
+            const history = JSON.parse(localStorage.getItem('facilitask_history') || '[]');
+            history.splice(index, 1);
+            localStorage.setItem('facilitask_history', JSON.stringify(history));
+            
+            loadHistory();
+            showToast('History entry removed!');
+        }
+
+        window.onload = function() {
+            loadSettings();
+            loadHistory();
+        };
+    </script>
+</body>
+
+</html>

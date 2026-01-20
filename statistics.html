@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Statistics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #0018b3, #0f3443);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+            color: black;
+            text-align: left;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .stat {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+
+        .nav-button {
+            display: block;
+            width: 100%;
+            margin: 15px 0;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            transform: scale(1.05);
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        .progress {
+            height: 20px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Task Statistics</h1>
+        <div id="statistics"></div>
+        <a href="mainpage.html" class="nav-button">Back to Main Page</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get task data from localStorage
+            const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
+            const tasksCompletedOnTime = JSON.parse(localStorage.getItem("tasksCompletedOnTime")) || 0;
+            const statisticsDiv = document.getElementById("statistics");
+
+            // Calculate statistics
+            const totalTasks = completedTasks.length;
+
+            // Proficiency calculation: percentage of tasks completed on time
+            const proficiency = totalTasks > 0 ? ((tasksCompletedOnTime / totalTasks) * 100).toFixed(2) : 0;
+
+            // Display statistics with progress bar
+            statisticsDiv.innerHTML = `
+                <div class="stat">Total Tasks Completed: ${totalTasks}</div>
+                <div class="stat">Tasks Completed On Time: ${tasksCompletedOnTime}</div>
+                <div class="stat">
+                    Proficiency: ${proficiency}%
+                    <div class="progress-bar">
+                        <div class="progress" style="width: ${proficiency}%">${proficiency}%</div>
+                    </div>
+                </div>
+            `;
+        });
+    </script>
+</body>
+
+</html>
