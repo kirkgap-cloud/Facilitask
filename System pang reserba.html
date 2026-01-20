@@ -230,8 +230,31 @@
         let currentEditingId = null;
         let countdownIntervals = {};
 
+        // --- LOAD BACKGROUND SETTINGS ---
+        function loadBackgroundSettings() {
+            const bgType = localStorage.getItem('bgType');
+            const body = document.body;
+            
+            if (bgType === 'image') {
+                const bgImage = localStorage.getItem('bgImage');
+                if (bgImage) {
+                    body.style.backgroundImage = `url('${bgImage}')`;
+                    body.style.animation = 'none';
+                    body.style.backgroundSize = 'cover';
+                }
+            } else if (bgType === 'gradient') {
+                const c1 = localStorage.getItem('gradColor1') || '#010d56';
+                const c2 = localStorage.getItem('gradColor2') || '#a2bdfc';
+                body.style.backgroundImage = `linear-gradient(270deg, ${c1}, ${c2}, ${c1}, ${c2})`;
+                body.style.animation = 'gradientAnimation 10s ease infinite';
+                body.style.backgroundSize = '400% 400%';
+            }
+            // If no bgType is set, the default CSS gradient will show
+        }
+
         // --- PERSISTENCE & STATISTICS LOGIC ---
         window.onload = function() {
+            loadBackgroundSettings(); // Load background first
             loadTasks();
             updateStatistics();
         };
