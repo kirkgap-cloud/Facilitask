@@ -24,36 +24,28 @@
             height: auto;
             display: block;
             z-index: 10;
-
-            /* FIX: Centering logic for block element */
             margin-left: auto;
             margin-right: auto;
-            /* Negative margin to pull the logo down over the container */
             margin-bottom: -40px;
-
         }
 
         body {
             font-family: var(--theme-font), sans-serif;
             text-align: center;
-            /* Updated background gradient */
             background: linear-gradient(to bottom, #b574f1, #940080);
             color: white;
-            padding: 20px;
+            padding: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
             overflow: hidden;
-            /* FIX: Ensures logo and container stack vertically and center as a unit */
             flex-direction: column;
         }
 
         .container {
-            /* Width fixed to 320px */
             max-width: 220px;
-            /* Retained square-ish look */
             padding: 40px 30px;
             background: rgb(255, 255, 255);
             border-radius: 10px;
@@ -71,7 +63,7 @@
 
         input {
             width: 100%;
-            margin: 10px 0;
+            margin: 15px 0;
             padding: 12px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -79,49 +71,31 @@
             box-sizing: border-box;
         }
 
-        /* ------------------------------------------------ */
-        /* PARALLELOGRAM LIQUID FILL BUTTON STYLES */
-        /* ------------------------------------------------ */
-
         .liquid-btn {
-            /* Base styles for the button */
             width: 50%;
-            /* Slightly less than 100% to prevent overflow */
             padding: 8px 15px;
-            /* ADJUSTED: Reduced vertical padding for slimmer look */
             font-size: 18px;
             border: none;
             cursor: pointer;
             margin-top: 15px;
-
-            /* Crucial for the effect & Shape: */
             position: relative;
             overflow: hidden;
             z-index: 1;
-
-            /* Apply Parallelogram shape (20 degrees skew) */
             transform: skewX(-20deg);
             border-radius: 0.25rem;
-            /* Apply some rounding to the container */
-
-            /* Button look (Black background, White text by default) */
             background: #000000;
             color: #ffffff;
             transition: color 0.4s ease, transform 0.3s ease;
         }
 
-        /* Inner span to counter-skew the text, keeping it readable */
         .liquid-btn-text {
             display: inline-block;
             transform: skewX(20deg);
-            /* Inverse skew to straighten the text */
             position: relative;
             z-index: 2;
-            /* Ensures text stays above the liquid fill */
             font-weight: 700;
         }
 
-        /* The Liquid Element (The White Fill) */
         .liquid-btn::before {
             content: '';
             position: absolute;
@@ -130,29 +104,35 @@
             width: 100%;
             height: 0;
             background-color: #ffffff;
-            /* The fill color is pure WHITE */
             transition: height 0.4s ease;
             z-index: -1;
         }
 
-        /* Hover Trigger */
         .liquid-btn:hover::before {
             height: 100%;
-            /* Fill grows completely on hover */
         }
 
-        /* Change Text Color to BLACK on hover */
         .liquid-btn:hover {
             color: #000000;
-            /* Text color changes to BLACK on hover */
         }
-
-        /* Error Message & Custom Alert Box Styles */
 
         .error {
             color: red;
             display: none;
             margin-top: 10px;
+        }
+
+        .forgot-password-link {
+            color: #00375a;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .forgot-password-link:hover {
+            color: #0056b3;
         }
 
         #message-box {
@@ -191,6 +171,68 @@
             margin-top: 15px;
             cursor: pointer;
             float: right;
+            border: none;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            color: black;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #00375a;
+        }
+
+        .modal-content input {
+            margin: 10px 0;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .modal-btn-primary {
+            background: #00375a;
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: #024a73;
+        }
+
+        .modal-btn-secondary {
+            background: #ccc;
+            color: black;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #bbb;
         }
 
         @keyframes fadeIn {
@@ -198,7 +240,6 @@
                 opacity: 0;
                 transform: translate(-50%, -60%);
             }
-
             to {
                 opacity: 1;
                 transform: translate(-50%, -50%);
@@ -209,25 +250,34 @@
 
 <body>
 
-    <!-- Logo element (using a placeholder URL for display) -->
     <img src="Facilitask Logo.png" alt="Facilitask Logo" class="logo"
         onerror="this.onerror=null; this.src='https://placehold.co/180x80/00375a/ffffff?text=Logo+Error'">
 
-    <!-- Custom Message Box Structure -->
     <div id="message-box-overlay"></div>
     <div id="message-box">
         <p id="message-content"></p>
         <button onclick="hideMessageBox()">Close</button>
     </div>
 
-    <!-- Login Container -->
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Reset Password</h3>
+            <p>Enter your username and email to receive a password reset link.</p>
+            <input type="text" id="reset-username" placeholder="Username">
+            <input type="email" id="reset-email" placeholder="Email Address">
+            <button class="modal-btn modal-btn-primary" onclick="sendResetEmail()">Send Reset Link</button>
+            <button class="modal-btn modal-btn-secondary" onclick="closeForgotPasswordModal()">Cancel</button>
+        </div>
+    </div>
+
     <div class="container" id="login-container">
         <h2>User Login</h2>
         <input type="text" id="login-username" placeholder="Username">
         <input type="password" id="login-password" placeholder="Password">
         <p class="error" id="login-error">Invalid username or password</p>
+        <a class="forgot-password-link" onclick="openForgotPasswordModal()">Forgot Password?</a>
 
-        <!-- Buttons with the new parallelogram text wrapper -->
         <button class="liquid-btn" onclick="validateLogin()">
             <span class="liquid-btn-text">Login</span>
         </button>
@@ -236,13 +286,12 @@
         </button>
     </div>
 
-    <!-- Sign Up Container (Hidden by Default) -->
     <div class="container" id="signup-container" style="display: none;">
         <h2>Create Account</h2>
         <input type="text" id="signup-username" placeholder="Enter a username">
+        <input type="email" id="signup-email" placeholder="Enter your email">
         <input type="password" id="signup-password" placeholder="Enter a password">
 
-        <!-- Buttons with the new parallelogram text wrapper -->
         <button class="liquid-btn" onclick="registerUser()">
             <span class="liquid-btn-text">Create Account</span>
         </button>
@@ -252,7 +301,6 @@
     </div>
 
     <script>
-        // --- Custom Message Box Functions ---
         function showMessageBox(message) {
             document.getElementById('message-content').innerText = message;
             document.getElementById('message-box-overlay').style.display = 'block';
@@ -264,7 +312,6 @@
             document.getElementById('message-box').style.display = 'none';
         }
 
-        // --- Navigation Functions ---
         function showSignUp() {
             document.getElementById("login-container").style.display = "none";
             document.getElementById("signup-container").style.display = "block";
@@ -276,54 +323,90 @@
             document.getElementById("login-container").style.display = "block";
         }
 
-        // --- Authentication Logic (using localStorage) ---
+        function openForgotPasswordModal() {
+            document.getElementById('forgot-password-modal').style.display = 'flex';
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgot-password-modal').style.display = 'none';
+            document.getElementById('reset-username').value = '';
+            document.getElementById('reset-email').value = '';
+        }
+
+        function sendResetEmail() {
+            const username = document.getElementById('reset-username').value.trim();
+            const email = document.getElementById('reset-email').value.trim();
+
+            if (!username || !email) {
+                showMessageBox('Please enter both username and email.');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userMatch = users.find(u => u.username === username && u.email === email);
+
+            if (userMatch) {
+                showMessageBox(`Password reset link has been sent to ${email}. Please check your inbox.`);
+                closeForgotPasswordModal();
+            } else {
+                showMessageBox('No account found with that username and email combination.');
+            }
+        }
+
         function registerUser() {
             const username = document.getElementById("signup-username").value.trim();
+            const email = document.getElementById("signup-email").value.trim();
             const password = document.getElementById("signup-password").value.trim();
 
-            if (username && password) {
-                // Check if username already exists
-                if (localStorage.getItem(username)) {
-                    showMessageBox("Error: This username is already taken. Please choose another.");
-                    return;
-                }
-
-                // Store user credentials
-                localStorage.setItem(username, password);
-
-                // Initialize user-specific data storage
-                const userData = {
-                    name: username,
-                    birthday: "",
-                    age: "",
-                    tagline: "",
-                    profilePic: ""
-                };
-                localStorage.setItem("userData_" + username, JSON.stringify(userData));
-
-                showMessageBox("Account created successfully!");
-                showLogin();
-            } else {
-                showMessageBox("Please fill in both username and password fields.");
+            if (!username || !email || !password) {
+                showMessageBox("Please fill in all fields.");
+                return;
             }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessageBox("Please enter a valid email address.");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            if (users.find(u => u.username === username)) {
+                showMessageBox("Error: This username is already taken. Please choose another.");
+                return;
+            }
+
+            users.push({ username, email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            const userData = {
+                name: username,
+                birthday: "",
+                age: "",
+                tagline: "",
+                profilePic: "",
+                password: password
+            };
+            localStorage.setItem("userData_" + username, JSON.stringify(userData));
+
+            showMessageBox("Account created successfully!");
+            setTimeout(() => showLogin(), 1500);
         }
 
         function validateLogin() {
             const username = document.getElementById("login-username").value.trim();
             const password = document.getElementById("login-password").value.trim();
-            const storedPassword = localStorage.getItem(username);
             const loginError = document.getElementById("login-error");
 
-            if (storedPassword && storedPassword === password) {
-                // Store the logged-in user details
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userMatch = users.find(u => u.username === username && u.password === password);
+
+            if (userMatch) {
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("loggedInUser", username);
-
                 loginError.style.display = "none";
-                // Redirect on successful login (placeholder URL)
                 window.location.href = "mainpage.html";
             } else {
-                // Show error message
                 loginError.style.display = "block";
             }
         }
