@@ -41,15 +41,94 @@
 
         .main-header {
             width: 100%;
-            padding: 5px 20px;
+            padding: 10px 20px;
             background: black;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-sizing: border-box;
+            height: 70px;
         }
 
-        .logo { height: 45px; }
+        .logo {
+            height: 100px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .settings-icon {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .settings-icon:hover {
+            transform: rotate(45deg);
+        }
+
+        /* --- Dropdown Styles Added --- */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+            margin-top: 10px;
+            z-index: 5000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            color: #333;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f0f0f0;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e10028;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         .header-button {
             background: none;
@@ -248,6 +327,18 @@
             background: #e5e5e5;
         }
 
+        .forgot-password-link {
+            color: #00375a;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .forgot-password-link:hover {
+            color: #0056b3;
+        }
+
         .profile-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -334,6 +425,126 @@
             color: #721c24;
         }
 
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            color: black;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #00375a;
+        }
+
+        .modal-content input {
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .modal-btn-primary {
+            background: #00375a;
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: #024a73;
+        }
+
+        .modal-btn-secondary {
+            background: #ccc;
+            color: black;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #bbb;
+        }
+
+        /* --- Notification Styles --- */
+        .notification-settings {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .notification-settings label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .notification-settings select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: left;
+        }
+
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+
+        .notification-item.overdue {
+            background: #fff3cd;
+            border-left: 4px solid #e10028;
+        }
+
+        .notification-item.upcoming {
+            background: #d1ecf1;
+            border-left: 4px solid #0275bd;
+        }
+
+        .notification-title {
+            font-weight: bold;
+            color: #00375a;
+            margin-bottom: 5px;
+        }
+
+        .notification-meta {
+            font-size: 0.85em;
+            color: #666;
+        }
+
         @media (max-width: 768px) {
             .profile-header {
                 flex-direction: column;
@@ -354,14 +565,84 @@
 <body>
     <header class="main-header">
         <a href="mainpage.html">
-            <img src="Facilitask Logo 4.png" alt="Logo" class="logo">
+            <img src="Facilitask Logo 4.png" alt="Logo" class="logo"
+                onerror="this.onerror=null; this.src='https://placehold.co/100x100/00375a/ffffff?text=LOGO'">
         </a>
-        <nav class="nav-buttons-container">
-            <a href="mainpage.html" class="header-button"><span>Main Page</span></a>
-            <a href="System pang reserba.html" class="header-button"><span>Work List</span></a>
-            <a href="History.html" class="header-button"><span>History</span></a>
-        </nav>
+        <div class="header-right">
+            <nav class="nav-buttons-container">
+                <a href="mainpage.html" class="header-button"><span>Main Page</span></a>
+                <a href="System pang reserba.html" class="header-button"><span>Work List</span></a>
+                <a href="History.html" class="header-button"><span>History</span></a>
+            </nav>
+            <div style="position: relative;">
+                <svg class="settings-icon" onclick="toggleDropdown()" viewBox="0 0 24 24" fill="white">
+                    <circle cx="12" cy="12" r="10" fill="white"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="black"/>
+                </svg>
+                <div id="notif-badge" class="notification-badge" style="display: none;">0</div>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <div class="dropdown-item" onclick="openNotificationsModal()">
+                        <i class="fas fa-bell"></i> Notifications
+                    </div>
+                    <div class="dropdown-item" onclick="openBackgroundModal()">
+                        <i class="fas fa-palette"></i> Customize Background
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
+
+    <div id="forgot-password-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Reset Password</h3>
+            <p>Enter your email to receive a password reset link.</p>
+            <input type="email" id="reset-email" placeholder="Email Address">
+            <button class="modal-btn modal-btn-primary" onclick="sendResetEmail()">Send Reset Link</button>
+            <button class="modal-btn modal-btn-secondary" onclick="closeForgotPasswordModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div id="notificationsModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Notifications</h3>
+            <div class="notification-settings">
+                <label>Notify me when task is due in:</label>
+                <select id="notification-time" onchange="saveNotificationSettings()">
+                    <option value="0">On due date only</option>
+                    <option value="1">1 day before</option>
+                    <option value="2">2 days before</option>
+                    <option value="3">3 days before</option>
+                    <option value="7">1 week before</option>
+                </select>
+            </div>
+            <div id="notifications-list"></div>
+            <button class="modal-btn modal-btn-secondary" onclick="closeNotificationsModal()" style="margin-top: 20px;">Close</button>
+        </div>
+    </div>
+
+    <div id="backgroundModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Background Customization</h3>
+            <p>Choose a dynamic color gradient or a custom image.</p>
+
+            <div style="margin-bottom: 20px;">
+                <label>Gradient Start Color:</label>
+                <input type="color" id="color1" value="#010d56">
+                <label>Gradient End Color:</label>
+                <input type="color" id="color2" value="#a2bdfc">
+                <button class="modal-btn modal-btn-primary" onclick="updateGradient()">Apply Gradient</button>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label>Select Custom Background Image:</label>
+                <input type="file" id="imageFile" accept="image/*">
+                <button class="modal-btn modal-btn-primary" onclick="applyImageBackground()">Apply Image</button>
+            </div>
+            
+            <button class="modal-btn modal-btn-secondary" onclick="resetBackground()">Reset to Default</button>
+            <button class="modal-btn modal-btn-secondary" onclick="closeBackgroundModal()">Close</button>
+        </div>
+    </div>
 
     <main class="main-content">
         <div class="profile-container">
@@ -388,6 +669,7 @@
                             <button type="button" class="peek-btn" id="peek-btn">👁️</button>
                         </div>
                     </div>
+                    <a class="forgot-password-link" onclick="openForgotPasswordModal()">Forgot Password?</a>
                 </div>
             </div>
 
@@ -423,10 +705,109 @@
     </main>
 
     <script>
-        // 1. LOAD BACKGROUND SETTINGS
+        const body = document.body;
+        const color1Input = document.getElementById('color1');
+        const color2Input = document.getElementById('color2');
+        const imageFileInput = document.getElementById('imageFile');
+
+        /* --- Dropdown & Notification Logic --- */
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown-menu');
+            dropdown.classList.toggle('show');
+        }
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('dropdown-menu');
+            const settingsIcon = document.querySelector('.settings-icon');
+            if (dropdown && !dropdown.contains(e.target) && settingsIcon && !settingsIcon.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        function openNotificationsModal() {
+            document.getElementById('notificationsModal').style.display = 'flex';
+            loadNotifications();
+            toggleDropdown();
+        }
+
+        function closeNotificationsModal() {
+            document.getElementById('notificationsModal').style.display = 'none';
+        }
+
+        function saveNotificationSettings() {
+            const notifTime = document.getElementById('notification-time').value;
+            localStorage.setItem('notification_time', notifTime);
+            loadNotifications();
+        }
+
+        function loadNotificationSettings() {
+            const notifTime = localStorage.getItem('notification_time') || '1';
+            document.getElementById('notification-time').value = notifTime;
+        }
+
+        function loadNotifications() {
+            const tasks = JSON.parse(localStorage.getItem('facilitask_data') || '[]');
+            const notifTime = parseInt(localStorage.getItem('notification_time') || '1');
+            const notifList = document.getElementById('notifications-list');
+            const badge = document.getElementById('notif-badge');
+            
+            const now = new Date().getTime();
+            const notifications = [];
+
+            tasks.forEach(task => {
+                if (task.isDone) return;
+
+                const deadline = new Date(`${task.date}T${task.time}`).getTime();
+                const timeUntil = deadline - now;
+                const daysUntil = timeUntil / (1000 * 60 * 60 * 24);
+
+                if (timeUntil < 0) {
+                    notifications.push({
+                        task: task,
+                        type: 'overdue',
+                        message: 'Overdue!',
+                        time: Math.abs(timeUntil)
+                    });
+                } else if (daysUntil <= notifTime) {
+                    notifications.push({
+                        task: task,
+                        type: 'upcoming',
+                        message: `Due in ${Math.ceil(daysUntil)} day(s)`,
+                        time: timeUntil
+                    });
+                }
+            });
+
+            badge.textContent = notifications.length;
+            badge.style.display = notifications.length > 0 ? 'flex' : 'none';
+
+            if (notifications.length === 0) {
+                notifList.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">No notifications</p>';
+                return;
+            }
+
+            notifList.innerHTML = '';
+            notifications.forEach(notif => {
+                const div = document.createElement('div');
+                div.className = `notification-item ${notif.type}`;
+                div.onclick = () => {
+                    window.location.href = 'System pang reserba.html';
+                };
+                
+                div.innerHTML = `
+                    <div class="notification-title">${notif.task.name}</div>
+                    <div class="notification-meta">
+                        <i class="fas fa-${notif.type === 'overdue' ? 'exclamation-triangle' : 'clock'}"></i> 
+                        ${notif.message} | ${notif.task.type} | Due: ${notif.task.date} ${notif.task.time}
+                    </div>
+                `;
+                notifList.appendChild(div);
+            });
+        }
+        /* --- End Dropdown Logic --- */
+
         function loadSettings() {
             const bgType = localStorage.getItem('bgType');
-            const body = document.body;
             
             if (bgType === 'image') {
                 body.style.backgroundImage = `url('${localStorage.getItem('bgImage')}')`;
@@ -441,9 +822,86 @@
             }
         }
 
-        // 2. SETUP PAGE ON LOAD
+        function updateGradient() {
+            const c1 = color1Input.value;
+            const c2 = color2Input.value;
+            body.style.backgroundImage = `linear-gradient(270deg, ${c1}, ${c2}, ${c1}, ${c2})`;
+            body.style.animation = 'gradientAnimation 10s ease infinite';
+            body.style.backgroundSize = '400% 400%';
+            localStorage.setItem('bgType', 'gradient');
+            localStorage.setItem('gradColor1', c1);
+            localStorage.setItem('gradColor2', c2);
+        }
+
+        function applyImageBackground() {
+            const file = imageFileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    body.style.backgroundImage = `url('${e.target.result}')`;
+                    body.style.animation = 'none';
+                    body.style.backgroundSize = 'cover';
+                    localStorage.setItem('bgType', 'image');
+                    localStorage.setItem('bgImage', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetBackground() {
+            color1Input.value = '#010d56';
+            color2Input.value = '#a2bdfc';
+            body.style.backgroundImage = 'linear-gradient(270deg, #010d56, #0036fa, #0275bd, #a2bdfc)';
+            body.style.animation = 'gradientAnimation 10s ease infinite';
+            body.style.backgroundSize = '400% 400%';
+            localStorage.removeItem('bgType');
+            localStorage.removeItem('gradColor1');
+            localStorage.removeItem('gradColor2');
+            localStorage.removeItem('bgImage');
+        }
+
+        function openBackgroundModal() {
+            document.getElementById('backgroundModal').style.display = 'flex';
+            toggleDropdown(); // Hide the dropdown when opening modal
+        }
+
+        function closeBackgroundModal() {
+            document.getElementById('backgroundModal').style.display = 'none';
+        }
+
+        function openForgotPasswordModal() {
+            document.getElementById('forgot-password-modal').style.display = 'flex';
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgot-password-modal').style.display = 'none';
+            document.getElementById('reset-email').value = '';
+        }
+
+        function sendResetEmail() {
+            const email = document.getElementById('reset-email').value.trim();
+            const user = localStorage.getItem("loggedInUser");
+
+            if (!email) {
+                showMessage('Please enter your email address.', true);
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userMatch = users.find(u => u.username === user && u.email === email);
+
+            if (userMatch) {
+                showMessage(`Password reset link has been sent to ${email}. Please check your inbox.`, false);
+                closeForgotPasswordModal();
+            } else {
+                showMessage('Email does not match our records.', true);
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             loadSettings();
+            loadNotificationSettings();
+            loadNotifications();
             
             const user = localStorage.getItem("loggedInUser");
 
@@ -453,7 +911,6 @@
                 fetchUserData(user);
             }
 
-            // --- PASSWORD PEEK LOGIC ---
             const passBox = document.getElementById("password");
             const btn = document.getElementById("peek-btn");
 
@@ -469,8 +926,6 @@
             btn.addEventListener("mousedown", show);
             btn.addEventListener("mouseup", hide);
             btn.addEventListener("mouseleave", hide);
-            
-            // Touch support for mobile
             btn.addEventListener("touchstart", (e) => {
                 e.preventDefault();
                 show();
@@ -480,7 +935,6 @@
                 hide();
             });
 
-            // Auto-calculate age from birthday
             document.getElementById("birthday").addEventListener("change", function() {
                 const birthday = new Date(this.value);
                 const today = new Date();
@@ -495,24 +949,23 @@
                     document.getElementById("age").value = age;
                 }
             });
+            
+            // Periodically refresh notifications
+            setInterval(loadNotifications, 120000);
         });
 
-        // 3. FETCH USER DATA
         function fetchUserData(username) {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userMatch = users.find(u => u.username === username);
             const savedData = JSON.parse(localStorage.getItem("userData_" + username)) || {};
             
-            // Search for password in all possible storage locations
             let foundPassword = "";
-
-            if (savedData.password) {
+            if (userMatch && userMatch.password) {
+                foundPassword = userMatch.password;
+            } else if (savedData.password) {
                 foundPassword = savedData.password;
-            } else {
-                const allUsers = JSON.parse(localStorage.getItem("users")) || [];
-                const match = allUsers.find(u => u.username === username);
-                if (match) foundPassword = match.password;
             }
 
-            // Populate form fields
             document.getElementById("name").value = savedData.name || username;
             document.getElementById("birthday").value = savedData.birthday || "";
             document.getElementById("age").value = savedData.age || "";
@@ -524,7 +977,6 @@
             }
         }
 
-        // 4. SAVE PROFILE
         document.getElementById("save-btn").addEventListener("click", function() {
             const user = localStorage.getItem("loggedInUser");
             const name = document.getElementById("name").value.trim();
@@ -534,7 +986,6 @@
             const tagline = document.getElementById("tagline").value.trim();
             const profilePic = document.getElementById("profile-pic").src;
 
-            // Validation
             if (!name) {
                 showMessage("Please enter your name", true);
                 return;
@@ -554,15 +1005,13 @@
                 profilePic: profilePic
             };
 
-            // Save to user-specific storage
             localStorage.setItem("userData_" + user, JSON.stringify(data));
 
-            // Also update in users array if it exists
-            const allUsers = JSON.parse(localStorage.getItem("users")) || [];
-            const userIndex = allUsers.findIndex(u => u.username === user);
+            const users = JSON.parse(localStorage.getItem("users") || []);
+            const userIndex = users.findIndex(u => u.username === user);
             if (userIndex !== -1) {
-                allUsers[userIndex].password = password;
-                localStorage.setItem("users", JSON.stringify(allUsers));
+                users[userIndex].password = password;
+                localStorage.setItem("users", JSON.stringify(users));
             }
 
             showMessage("Profile Updated Successfully!", false);
@@ -571,7 +1020,6 @@
             }, 1500);
         });
 
-        // 5. SHOW MESSAGE
         function showMessage(text, isError) {
             const msg = document.getElementById("save-message");
             msg.textContent = text;
@@ -585,18 +1033,15 @@
             }
         }
 
-        // 6. IMAGE UPLOAD
         document.getElementById("profile-input").addEventListener("change", function() {
             if (this.files && this.files[0]) {
                 const file = this.files[0];
                 
-                // Validate file size (max 5MB)
                 if (file.size > 5 * 1024 * 1024) {
                     showMessage("Image too large. Maximum size is 5MB", true);
                     return;
                 }
 
-                // Validate file type
                 if (!file.type.startsWith('image/')) {
                     showMessage("Please select a valid image file", true);
                     return;
@@ -610,7 +1055,6 @@
             }
         });
 
-        // 7. NAVIGATION BUTTONS
         document.getElementById("logout-btn").onclick = () => {
             if (confirm("Are you sure you want to logout?")) {
                 localStorage.removeItem("loggedInUser");
