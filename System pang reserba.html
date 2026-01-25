@@ -31,11 +31,88 @@
         }
 
         .main-header {
-            width: 100%; padding: 5px 20px; background: black;
+            width: 100%; padding: 10px 20px; background: black;
             display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;
+            height: 75px;
         }
 
-        .logo { height: 45px; }
+        .logo { 
+            height: 100px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .settings-icon {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .settings-icon:hover {
+            transform: rotate(45deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+            margin-top: 10px;
+            z-index: 5000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 20px;
+            color: #333;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f0f0f0;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e10028;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         .header-button {
             background: none; border: 2px solid white; color: white;
@@ -67,9 +144,14 @@
         .input-group { display: flex; gap: 15px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; }
         .input-wrapper { flex: 1; min-width: 200px; text-align: left; }
         
-        input, select, button {
+        input, select, button, textarea {
             width: 100%; padding: 12px; border: 1px solid #ccc;
             border-radius: 8px; box-sizing: border-box; font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
         }
 
         #task-list {
@@ -87,6 +169,16 @@
 
         .task-header { font-weight: 700; font-size: 1.1em; color: #00375a; margin-bottom: 5px; }
         .task-meta { font-size: 0.85em; color: #666; margin-bottom: 10px; }
+        .task-about {
+            font-size: 0.9em;
+            color: #555;
+            font-style: italic;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #fff;
+            border-radius: 5px;
+            border-left: 3px solid #0275bd;
+        }
 
         .task-img { 
             width: 100%; height: 150px; object-fit: cover; 
@@ -103,14 +195,14 @@
         .btn-small { padding: 8px; font-size: 11px; font-weight: bold; cursor: pointer; border: none; border-radius: 5px; color: white; }
 
         /* Modals */
-        .modal {
+        .modal, .modal-overlay {
             display: none; position: fixed; z-index: 3000; left: 0; top: 0;
             width: 100%; height: 100%; background: rgba(0,0,0,0.85);
             justify-content: center; align-items: center;
         }
         .modal-content {
             background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px;
-            color: black; text-align: center;
+            color: black; text-align: center; max-height: 90vh; overflow-y: auto;
         }
 
         /* Image Lightbox Fix */
@@ -130,6 +222,68 @@
             display: inline-block; background: #28a745; color: white; padding: 4px 10px;
             border-radius: 12px; font-size: 11px; margin-left: 10px; font-weight: bold;
         }
+
+        .notification-settings {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .notification-settings label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .notification-settings select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+
+        .notification-item.overdue {
+            background: #fff3cd;
+            border-left: 4px solid #e10028;
+        }
+
+        .notification-item.upcoming {
+            background: #d1ecf1;
+            border-left: 4px solid #0275bd;
+        }
+
+        .notification-title {
+            font-weight: bold;
+            color: #00375a;
+            margin-bottom: 5px;
+        }
+
+        .notification-meta {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .close-button {
+            padding: 10px 20px; 
+            background: #333; 
+            color: white; 
+            border-radius: 5px; 
+            cursor: pointer;
+            border: none;
+        }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -140,12 +294,30 @@
 
     <header class="main-header">
         <a href="mainpage.html">
-            <img src="Facilitask Logo 4.png" alt="Logo" class="logo">
+            <img src="Facilitask Logo 4.png" alt="Logo" class="logo"
+                onerror="this.onerror=null; this.src='https://placehold.co/100x100/00375a/ffffff?text=LOGO'">
         </a>
-        <nav class="nav-buttons-container">
-            <a href="mainpage.html" class="header-button"><span>Main Page</span></a>
-            <a href="History.html" class="header-button"><span>History</span></a>
-        </nav>
+        <div class="header-right">
+            <nav class="nav-buttons-container">
+                <a href="mainpage.html" class="header-button"><span>Main Page</span></a>
+                <a href="History.html" class="header-button"><span>History</span></a>
+            </nav>
+            <div style="position: relative;">
+                <svg class="settings-icon" onclick="toggleDropdown()" viewBox="0 0 24 24" fill="white">
+                    <circle cx="12" cy="12" r="10" fill="white"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="black"/>
+                </svg>
+                <div id="notif-badge" class="notification-badge" style="display: none;">0</div>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <div class="dropdown-item" onclick="openNotificationsModal()">
+                        <i class="fas fa-bell"></i> Notifications
+                    </div>
+                    <div class="dropdown-item" onclick="openBackgroundModal()">
+                        <i class="fas fa-palette"></i> Customize Background
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <div class="container">
@@ -161,6 +333,13 @@
                     <option value="Project">Project</option>
                     <option value="Activity">Activity</option>
                 </select>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <div class="input-wrapper">
+                <label style="font-size:11px; font-weight:bold; color:#666;">ABOUT (Optional)</label>
+                <textarea id="task-about" placeholder="Additional details about this task..."></textarea>
             </div>
         </div>
 
@@ -191,6 +370,8 @@
             <div style="text-align:left; display:flex; flex-direction:column; gap:10px;">
                 <label style="font-size:12px;">Task Name</label>
                 <input type="text" id="edit-name">
+                <label style="font-size:12px;">About</label>
+                <textarea id="edit-about" placeholder="Additional details..."></textarea>
                 <div style="display:flex; gap:10px;">
                     <div style="flex:1;">
                         <label style="font-size:12px;">Date</label>
@@ -224,125 +405,93 @@
         </div>
     </div>
 
+    <div id="notificationsModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Notifications</h3>
+            <div class="notification-settings">
+                <label>Notify me when task is due in:</label>
+                <select id="notification-time" onchange="saveNotificationSettings()">
+                    <option value="0">On due date only</option>
+                    <option value="1">1 day before</option>
+                    <option value="2">2 days before</option>
+                    <option value="3">3 days before</option>
+                    <option value="7">1 week before</option>
+                </select>
+            </div>
+            <div id="notifications-list"></div>
+            <button onclick="closeNotificationsModal()" class="close-button" style="width: 100%; margin-top: 20px;">Close</button>
+        </div>
+    </div>
+
+    <div id="backgroundModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Background Customization</h3>
+            <p>Choose a dynamic color gradient or a custom image.</p>
+
+            <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+                <label>Gradient Start Color:</label>
+                <input type="color" id="color1" value="#010d56">
+                <label>Gradient End Color:</label>
+                <input type="color" id="color2" value="#a2bdfc">
+                <button onclick="updateGradient()" style="margin-top: 10px; padding: 10px 15px; background: #0036fa; color: white; border-radius: 5px; border: none; width: 100%;">Apply Gradient</button>
+            </div>
+
+            <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+                <label>Select Custom Background Image:</label>
+                <input type="file" id="imageFile" accept="image/*">
+                <button onclick="applyImageBackground()" style="margin-top: 10px; padding: 10px 15px; background: #0036fa; color: white; border-radius: 5px; border: none; width: 100%;">Apply Image</button>
+            </div>
+            
+            <button onclick="resetBackground()" style="background: #ff5555; color: white; padding: 10px 15px; border-radius: 5px; border: none; width: 100%; margin-bottom: 10px;">Reset to Default</button>
+            <button onclick="closeBackgroundModal()" class="close-button" style="width: 100%;">Close</button>
+        </div>
+    </div>
+
     <div id="toast">Message</div>
 
     <script>
         let currentEditingId = null;
         let countdownIntervals = {};
 
-        // --- LOAD BACKGROUND SETTINGS ---
-        function loadBackgroundSettings() {
-            const bgType = localStorage.getItem('bgType');
-            const body = document.body;
-            
-            if (bgType === 'image') {
-                const bgImage = localStorage.getItem('bgImage');
-                if (bgImage) {
-                    body.style.backgroundImage = `url('${bgImage}')`;
-                    body.style.animation = 'none';
-                    body.style.backgroundSize = 'cover';
-                }
-            } else if (bgType === 'gradient') {
-                const c1 = localStorage.getItem('gradColor1') || '#010d56';
-                const c2 = localStorage.getItem('gradColor2') || '#a2bdfc';
-                body.style.backgroundImage = `linear-gradient(270deg, ${c1}, ${c2}, ${c1}, ${c2})`;
-                body.style.animation = 'gradientAnimation 10s ease infinite';
-                body.style.backgroundSize = '400% 400%';
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown-menu');
+            dropdown.classList.toggle('show');
+        }
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('dropdown-menu');
+            const settingsIcon = document.querySelector('.settings-icon');
+            if (dropdown && !dropdown.contains(e.target) && settingsIcon && !settingsIcon.contains(e.target)) {
+                dropdown.classList.remove('show');
             }
-            // If no bgType is set, the default CSS gradient will show
+        });
+
+        function openNotificationsModal() {
+            document.getElementById('notificationsModal').style.display = 'flex';
+            loadNotifications();
+            toggleDropdown();
         }
 
-        // --- PERSISTENCE & STATISTICS LOGIC ---
-        window.onload = function() {
-            loadBackgroundSettings(); // Load background first
-            loadTasks();
-            updateStatistics();
-        };
-
-        function loadTasks() {
-            const savedTasks = JSON.parse(localStorage.getItem('facilitask_data') || '[]');
-            savedTasks.forEach(t => {
-                createTaskElement(t.id, t.name, t.type, t.date, t.time, t.img, t.isDone, t.isPaused);
-            });
+        function closeNotificationsModal() {
+            document.getElementById('notificationsModal').style.display = 'none';
         }
 
-        function autoSave() {
-            const tasks = [];
-            document.querySelectorAll('.task').forEach(el => {
-                const id = el.id.replace('task-', '');
-                const imgEl = document.getElementById(`img-${id}`);
-                const imgSrc = imgEl && imgEl.src && imgEl.src.startsWith('data:') ? imgEl.src : '';
-                
-                tasks.push({
-                    id: id,
-                    name: el.dataset.name,
-                    type: el.dataset.type,
-                    date: el.dataset.date,
-                    time: el.dataset.time,
-                    img: imgSrc,
-                    isDone: el.classList.contains('done'),
-                    isPaused: el.dataset.paused === 'true'
-                });
-            });
-            localStorage.setItem('facilitask_data', JSON.stringify(tasks));
-            updateStatistics();
+        function openBackgroundModal() {
+            document.getElementById('backgroundModal').style.display = 'flex';
+            toggleDropdown();
         }
 
-        function updateStatistics() {
-            const tasks = JSON.parse(localStorage.getItem('facilitask_data') || '[]');
-            const totalTasks = tasks.length;
-            const completedTasks = tasks.filter(t => t.isDone).length;
-            
-            // Save statistics
-            const stats = {
-                totalCreated: totalTasks,
-                totalCompleted: completedTasks,
-                lastUpdated: new Date().toISOString()
-            };
-            localStorage.setItem('facilitask_statistics', JSON.stringify(stats));
-            
-            // Update display
-            document.getElementById('stats-display').innerText = 
-                `${totalTasks} Tasks (${completedTasks} Done)`;
+        function closeBackgroundModal() {
+            document.getElementById('backgroundModal').style.display = 'none';
         }
 
-        function saveToHistory() {
-            const tasks = JSON.parse(localStorage.getItem('facilitask_data') || '[]');
+        function saveNotificationSettings() {
+            const notifTime = document.getElementById('notification-time').value;
+            // CORRECTED: Save the actual setting, not the history array
+            localStorage.setItem('notification_time', notifTime);
             
-            if (tasks.length === 0) {
-                showToast("No tasks to save!");
-                return;
-            }
-
-            // Get existing history
-            const history = JSON.parse(localStorage.getItem('facilitask_history') || '[]');
-            
-            // Create history entry with timestamp
-            const historyEntry = {
-                id: Date.now(),
-                timestamp: new Date().toISOString(),
-                date: new Date().toLocaleDateString(),
-                time: new Date().toLocaleTimeString(),
-                tasks: JSON.parse(JSON.stringify(tasks)), // Deep copy
-                totalTasks: tasks.length,
-                completedTasks: tasks.filter(t => t.isDone).length
-            };
-            
-            // Add to history (newest first)
-            history.unshift(historyEntry);
-            
-            // Keep only last 50 history entries
-            if (history.length > 50) {
-                history.splice(50);
-            }
-            
-            // Save history
-            localStorage.setItem('facilitask_history', JSON.stringify(history));
-            
-            // Pause all countdowns
-            pauseAllCountdowns();
-            
-            showToast(`Saved to history! (${tasks.length} tasks archived)`);
+            showToast(`Notification settings saved!`);
+            loadNotifications();
         }
 
         function pauseAllCountdowns() {
@@ -373,6 +522,7 @@
             const type = document.getElementById("task-type");
             const date = document.getElementById("task-date");
             const time = document.getElementById("task-time");
+            const about = document.getElementById("task-about");
 
             if (!input.value.trim() || !date.value) { 
                 alert("Please enter task name and due date!"); 
@@ -381,16 +531,17 @@
 
             const id = Date.now();
             const timeVal = time.value || "23:59:59";
-            createTaskElement(id, input.value.trim(), type.value, date.value, timeVal, '', false, false);
+            createTaskElement(id, input.value.trim(), type.value, date.value, timeVal, '', false, false, about.value.trim());
             
             input.value = "";
             date.value = "";
             time.value = "";
+            about.value = "";
             autoSave();
             showToast("Task added!");
         }
 
-        function createTaskElement(id, name, type, date, time, imgData, isDone, isPaused) {
+        function createTaskElement(id, name, type, date, time, imgData, isDone, isPaused, about) {
             const deadline = new Date(`${date}T${time}`).getTime();
             const taskItem = document.createElement("li");
             taskItem.className = "task" + (isDone ? " done" : "");
@@ -399,16 +550,18 @@
             taskItem.dataset.type = type;
             taskItem.dataset.date = date;
             taskItem.dataset.time = time;
+            taskItem.dataset.about = about || '';
             taskItem.dataset.paused = isPaused ? 'true' : 'false';
 
-            // Only show image if it's a valid data URL
             const hasValidImage = imgData && imgData.startsWith('data:image');
             const showImg = hasValidImage ? 'block' : 'none';
+            const aboutHTML = about ? `<div class="task-about"><i class="fas fa-info-circle"></i> ${about}</div>` : '';
 
             taskItem.innerHTML = `
                 <img src="${hasValidImage ? imgData : ''}" class="task-img" id="img-${id}" style="display: ${showImg}" onclick="openLightbox(this.src)">
                 <div class="task-header">${name}</div>
                 <div class="task-meta"><i class="fas fa-tasks"></i> ${type} | Due: ${date}</div>
+                ${aboutHTML}
                 <div id="countdown-${id}" style="font-size:13px; font-weight:bold; color:#e10028; margin-bottom:10px;"></div>
                 <div class="qr-container" id="qr-${id}"></div>
                 <div class="task-actions">
@@ -421,7 +574,6 @@
 
             document.getElementById("task-list").appendChild(taskItem);
             
-            // Only start countdown if not paused and not done
             if (!isPaused && !isDone) {
                 startCountdown(deadline, id);
             } else if (isPaused) {
@@ -461,7 +613,7 @@
                       m = Math.floor((dist % 3600000) / 60000), 
                       s = Math.floor((dist % 60000) / 1000);
                 el.innerHTML = `<i class="far fa-clock"></i> ${d}d ${h}h ${m}m ${s}s`;
-                el.style.color = dist < 86400000 ? '#e10028' : '#666'; // Red if less than 1 day
+                el.style.color = dist < 86400000 ? '#e10028' : '#666';
             }, 1000);
         }
 
@@ -469,9 +621,10 @@
             currentEditingId = id;
             const task = document.getElementById(`task-${id}`);
             document.getElementById("edit-name").value = task.dataset.name;
+            document.getElementById("edit-about").value = task.dataset.about || '';
             document.getElementById("edit-date").value = task.dataset.date;
             document.getElementById("edit-time").value = task.dataset.time;
-            document.getElementById("edit-image").value = ''; // Reset file input
+            document.getElementById("edit-image").value = '';
             document.getElementById("editModal").style.display = "flex";
         }
 
@@ -479,6 +632,7 @@
             const id = currentEditingId;
             const task = document.getElementById(`task-${id}`);
             const newName = document.getElementById("edit-name").value.trim();
+            const newAbout = document.getElementById("edit-about").value.trim();
             const newDate = document.getElementById("edit-date").value;
             const newTime = document.getElementById("edit-time").value;
             const imageInput = document.getElementById("edit-image");
@@ -489,12 +643,26 @@
             }
 
             task.dataset.name = newName;
+            task.dataset.about = newAbout;
             task.dataset.date = newDate;
             task.dataset.time = newTime;
             task.querySelector(".task-header").innerText = newName;
             task.querySelector(".task-meta").innerHTML = `<i class="fas fa-tasks"></i> ${task.dataset.type} | Due: ${newDate}`;
             
-            // Restart countdown if not paused or done
+            const existingAbout = task.querySelector(".task-about");
+            if (newAbout) {
+                if (existingAbout) {
+                    existingAbout.innerHTML = `<i class="fas fa-info-circle"></i> ${newAbout}`;
+                } else {
+                    const aboutDiv = document.createElement('div');
+                    aboutDiv.className = 'task-about';
+                    aboutDiv.innerHTML = `<i class="fas fa-info-circle"></i> ${newAbout}`;
+                    task.querySelector(".task-meta").insertAdjacentElement('afterend', aboutDiv);
+                }
+            } else if (existingAbout) {
+                existingAbout.remove();
+            }
+            
             if (task.dataset.paused !== 'true' && !task.classList.contains('done')) {
                 startCountdown(new Date(`${newDate}T${newTime}`).getTime(), id);
             }
@@ -522,7 +690,6 @@
             const countdownEl = document.getElementById(`countdown-${id}`);
             
             if (isDone) {
-                // Stop countdown when marked done
                 if (countdownIntervals[id]) {
                     clearInterval(countdownIntervals[id]);
                     countdownIntervals[id] = null;
@@ -530,7 +697,6 @@
                 countdownEl.innerHTML = '<i class="fas fa-check-circle"></i> COMPLETED';
                 countdownEl.style.color = '#28a745';
             } else {
-                // Restart countdown if unmarked and not paused
                 if (task.dataset.paused !== 'true') {
                     const deadline = new Date(`${task.dataset.date}T${task.dataset.time}`).getTime();
                     startCountdown(deadline, id);
@@ -551,7 +717,6 @@
         }
 
         function confirmClearAll() {
-            // Stop all countdowns
             Object.keys(countdownIntervals).forEach(id => {
                 if (countdownIntervals[id]) {
                     clearInterval(countdownIntervals[id]);
@@ -563,6 +728,7 @@
             localStorage.removeItem('facilitask_data');
             closeClearModal(); 
             updateStatistics();
+            loadNotifications();
             showToast("All tasks cleared!");
         }
 
@@ -582,6 +748,225 @@
                     text: `${task.dataset.name} - Due: ${task.dataset.date} ${task.dataset.time}` 
                 }); 
             }
+        }
+
+        setInterval(loadNotifications, 120000);
+        
+        // Removed broken "Item('notification_time')" line here
+
+        function loadNotificationSettings() {
+            const notifTime = localStorage.getItem('notification_time') || '1';
+            document.getElementById('notification-time').value = notifTime;
+        }
+
+        function loadNotifications() {
+            const tasks = JSON.parse(localStorage.getItem('facilitask_data') || '[]');
+            const notifTime = parseInt(localStorage.getItem('notification_time') || '1');
+            const notifList = document.getElementById('notifications-list');
+            const badge = document.getElementById('notif-badge');
+            
+            const now = new Date().getTime();
+            const notifications = [];
+
+            tasks.forEach(task => {
+                if (task.isDone) return;
+
+                const deadline = new Date(`${task.date}T${task.time}`).getTime();
+                const timeUntil = deadline - now;
+                const daysUntil = timeUntil / (1000 * 60 * 60 * 24);
+
+                if (timeUntil < 0) {
+                    notifications.push({
+                        task: task,
+                        type: 'overdue',
+                        message: 'Overdue!',
+                        time: Math.abs(timeUntil)
+                    });
+                } else if (daysUntil <= notifTime) {
+                    notifications.push({
+                        task: task,
+                        type: 'upcoming',
+                        message: `Due in ${Math.ceil(daysUntil)} day(s)`,
+                        time: timeUntil
+                    });
+                }
+            });
+
+            badge.textContent = notifications.length;
+            badge.style.display = notifications.length > 0 ? 'flex' : 'none';
+
+            if (notifications.length === 0) {
+                notifList.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">No notifications</p>';
+                return;
+            }
+
+            notifList.innerHTML = '';
+            notifications.forEach(notif => {
+                const div = document.createElement('div');
+                div.className = `notification-item ${notif.type}`;
+                
+                const aboutText = notif.task.about ? `<div style="font-size: 0.85em; margin-top: 3px;">${notif.task.about}</div>` : '';
+                
+                div.innerHTML = `
+                    <div class="notification-title">${notif.task.name}</div>
+                    <div class="notification-meta">
+                        <i class="fas fa-${notif.type === 'overdue' ? 'exclamation-triangle' : 'clock'}"></i> 
+                        ${notif.message} | ${notif.task.type} | Due: ${notif.task.date} ${notif.task.time}
+                    </div>
+                    ${aboutText}
+                `;
+                notifList.appendChild(div);
+            });
+        }
+
+        function updateGradient() {
+            const c1 = document.getElementById('color1').value;
+            const c2 = document.getElementById('color2').value;
+            document.body.style.backgroundImage = `linear-gradient(270deg, ${c1}, ${c2}, ${c1}, ${c2})`;
+            document.body.style.animation = 'gradientAnimation 10s ease infinite';
+            document.body.style.backgroundSize = '400% 400%';
+            localStorage.setItem('bgType', 'gradient');
+            localStorage.setItem('gradColor1', c1);
+            localStorage.setItem('gradColor2', c2);
+            showToast('Gradient applied!');
+        }
+
+        function applyImageBackground() {
+            const file = document.getElementById('imageFile').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.body.style.backgroundImage = `url('${e.target.result}')`;
+                    document.body.style.animation = 'none';
+                    document.body.style.backgroundSize = 'cover';
+                    localStorage.setItem('bgType', 'image');
+                    localStorage.setItem('bgImage', e.target.result);
+                    showToast('Background image applied!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetBackground() {
+            document.getElementById('color1').value = '#010d56';
+            document.getElementById('color2').value = '#a2bdfc';
+            document.body.style.backgroundImage = 'linear-gradient(270deg, #010d56, #0036fa, #0275bd, #a2bdfc)';
+            document.body.style.animation = 'gradientAnimation 10s ease infinite';
+            document.body.style.backgroundSize = '400% 400%';
+            localStorage.removeItem('bgType');
+            localStorage.removeItem('gradColor1');
+            localStorage.removeItem('gradColor2');
+            localStorage.removeItem('bgImage');
+            showToast('Background reset to default!');
+        }
+
+        // --- LOAD BACKGROUND SETTINGS ---
+        function loadBackgroundSettings() {
+            const bgType = localStorage.getItem('bgType');
+            const body = document.body;
+            
+            if (bgType === 'image') {
+                const bgImage = localStorage.getItem('bgImage');
+                if (bgImage) {
+                    body.style.backgroundImage = `url('${bgImage}')`;
+                    body.style.animation = 'none';
+                    body.style.backgroundSize = 'cover';
+                }
+            } else if (bgType === 'gradient') {
+                const c1 = localStorage.getItem('gradColor1') || '#010d56';
+                const c2 = localStorage.getItem('gradColor2') || '#a2bdfc';
+                body.style.backgroundImage = `linear-gradient(270deg, ${c1}, ${c2}, ${c1}, ${c2})`;
+                body.style.animation = 'gradientAnimation 10s ease infinite';
+                body.style.backgroundSize = '400% 400%';
+            }
+        }
+
+        // --- PERSISTENCE & STATISTICS LOGIC ---
+        window.onload = function() {
+            loadBackgroundSettings();
+            loadTasks();
+            updateStatistics();
+            loadNotificationSettings();
+            loadNotifications();
+        };
+
+        function loadTasks() {
+            const savedTasks = JSON.parse(localStorage.getItem('facilitask_data') || '[]');
+            savedTasks.forEach(t => {
+                createTaskElement(t.id, t.name, t.type, t.date, t.time, t.img, t.isDone, t.isPaused, t.about || '');
+            });
+        }
+
+        function autoSave() {
+            const tasks = [];
+            document.querySelectorAll('.task').forEach(el => {
+                const id = el.id.replace('task-', '');
+                const imgEl = document.getElementById(`img-${id}`);
+                const imgSrc = imgEl && imgEl.src && imgEl.src.startsWith('data:') ? imgEl.src : '';
+                
+                tasks.push({
+                    id: id,
+                    name: el.dataset.name,
+                    type: el.dataset.type,
+                    date: el.dataset.date,
+                    time: el.dataset.time,
+                    about: el.dataset.about || '',
+                    img: imgSrc,
+                    isDone: el.classList.contains('done'),
+                    isPaused: el.dataset.paused === 'true'
+                });
+            });
+            localStorage.setItem('facilitask_data', JSON.stringify(tasks));
+            updateStatistics();
+            loadNotifications();
+        }
+
+        function updateStatistics() {
+            const tasks = JSON.parse(localStorage.getItem('facilitask_data') || '[]');
+            const totalTasks = tasks.length;
+            const completedTasks = tasks.filter(t => t.isDone).length;
+            
+            const stats = {
+                totalCreated: totalTasks,
+                totalCompleted: completedTasks,
+                lastUpdated: new Date().toISOString()
+            };
+            localStorage.setItem('facilitask_statistics', JSON.stringify(stats));
+            
+            document.getElementById('stats-display').innerText = 
+                `${totalTasks} Tasks (${completedTasks} Done)`;
+        }
+
+        function saveToHistory() {
+            // CORRECTED: The function body was missing and the logic was floating outside
+            const tasks = JSON.parse(localStorage.getItem('facilitask_data') || '[]');
+            
+            if (tasks.length === 0) {
+                showToast("No tasks to save!");
+                return;
+            }
+
+            const history = JSON.parse(localStorage.getItem('facilitask_history') || '[]');
+            
+            const historyEntry = {
+                id: Date.now(),
+                timestamp: new Date().toISOString(),
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+                tasks: JSON.parse(JSON.stringify(tasks)),
+                totalTasks: tasks.length,
+                completedTasks: tasks.filter(t => t.isDone).length
+            };
+            
+            history.unshift(historyEntry);
+            
+            if (history.length > 50) {
+                history.splice(50);
+            }
+            
+            // CORRECTED: Fixed the incomplete localStorage command
+            localStorage.setItem('facilitask_history', JSON.stringify(history));
+            showToast("Saved to History!");
         }
     </script>
 </body>
